@@ -1,10 +1,13 @@
-"""Main execution script for the Riot API data fetcher."""
+from flask import Flask, render_template
 
 import getAccountId
 import getMatchHistory
 
+app = Flask(__name__)
 
-def main():
+
+@app.route("/")
+def index():
     """Main function to fetch and display data."""
     account_id = getAccountId.get_account_id()
     if account_id:
@@ -14,12 +17,15 @@ def main():
         )
 
         total_games = sum(lost_against.values())
+        results = []
         for index, (champion, count) in enumerate(sorted_champions, 1):
             loss_percentage = (count / total_games) * 100
-            print(
+            results.append(
                 f"{index} - {champion} - {count} games played against - {loss_percentage:.2f}% loss percentage"
             )
+        return render_template("index.html", results=results)
+    return "Error fetching data."
 
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)
