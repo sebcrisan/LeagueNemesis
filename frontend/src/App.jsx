@@ -1,35 +1,72 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [summonerName, setSummonerName] = useState("");
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/api/get-data", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ summonerName }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setData(result.data);
+      } else {
+        console.error("Error fetching data:", response.statusText);
+        setData([]);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setData([]);
+    }
+
+    setLoading(false);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div>
+      <h1>League of Legends Nemesis</h1>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Summoner Name:
+          <input
+            type="text"
+            value={summonerName}
+            onChange={(e) => setSummonerName(e.target.value)}
+            required
+          />
+        </label>
+        <button type="submit" disabled={loading}>
+          {loading ? "Loading..." : "Fetch Data"}
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      </form>
+      {data.length > 0 && (
+        <div className="result">
+          <h2>Results:</h2>
+          <ul>
+            {data.map((item) => (
+              <li key={item.index}>
+                {item.index} - {item.champion} - {item.count} games played
+                against - {item.loss_percentage}%
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
