@@ -16,7 +16,7 @@ def get_match_history(puuid):
     Returns:
         list: A list of match data dictionaries.
     """
-    api_uri = f"https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?count=100&api_key={API_KEY}"
+    api_uri = f"https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?count=10&api_key={API_KEY}"
     response = requests.get(api_uri)
     if not response.ok:
         print(f"Error fetching match IDs: {response}")

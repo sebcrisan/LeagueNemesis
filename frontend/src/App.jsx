@@ -47,28 +47,44 @@ function App() {
             value={summonerName}
             onChange={(e) => setSummonerName(e.target.value)}
             required
-            className="mt-2 p-2 w-full border rounded-md"
+            className="mt-2 p-3 w-full border rounded-md"
           />
         </label>
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md w-full"
+          className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white p-2 rounded-md w-full transition duration-150"
         >
           {loading ? "Loading..." : "Fetch Data"}
         </button>
       </form>
+      {loading && <div className="loader mt-4"></div>} {/* Loading spinner */}
       {data.length > 0 && (
         <div className="result mt-8 bg-white shadow-lg rounded-lg p-4 w-full max-w-md">
           <h2 className="text-xl font-bold mb-4">Results:</h2>
-          <ul>
-            {data.map((item) => (
-              <li key={item.index} className="mb-2">
-                {item.index} - {item.champion} - {item.count} games played
-                against - {item.loss_percentage}%
-              </li>
-            ))}
-          </ul>
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th className="px-4 py-2">Index</th>
+                <th className="px-4 py-2">Champion</th>
+                <th className="px-4 py-2">Games Played Against</th>
+                <th className="px-4 py-2">Loss Percentage</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {data.map((item, idx) => (
+                <tr
+                  key={item.index}
+                  className={idx % 2 === 0 ? "bg-gray-50" : ""}
+                >
+                  <td className="px-4 py-2">{item.index}</td>
+                  <td className="px-4 py-2">{item.champion}</td>
+                  <td className="px-4 py-2">{item.count}</td>
+                  <td className="px-4 py-2">{item.loss_percentage}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
