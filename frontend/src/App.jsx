@@ -1,6 +1,15 @@
 import { useState } from "react";
 import "./App.css";
 import "./styles/styles.css";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 function App() {
   const [summonerName, setSummonerName] = useState("");
@@ -68,31 +77,30 @@ function App() {
         )}{" "}
         {/* Loading spinner */}
         {data.length > 0 && (
-          <div className="result mt-8 bg-white shadow-lg rounded-lg p-4 w-full max-w-md">
+          <div className="result mt-8 w-full max-w-md overflow-x-auto">
             <h2 className="text-xl font-bold mb-4">Results:</h2>
-            <table className="min-w-full divide-y divide-gray-200 table-auto">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2">Index</th>
-                  <th className="px-4 py-2">Champion</th>
-                  <th className="px-4 py-2">Games Played Against</th>
-                  <th className="px-4 py-2">Loss Percentage</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {data.map((item, idx) => (
-                  <tr
-                    key={item.index}
-                    className={idx % 2 === 0 ? "bg-gray-50" : ""}
-                  >
-                    <td className="px-4 py-2">{item.index}</td>
-                    <td className="px-4 py-2">{item.champion}</td>
-                    <td className="px-4 py-2">{item.count}</td>
-                    <td className="px-4 py-2">{item.loss_percentage}%</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Index</TableCell>
+                    <TableCell>Champion</TableCell>
+                    <TableCell>Games Played Against</TableCell>
+                    <TableCell>Loss Percentage</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data.map((item) => (
+                    <TableRow key={item.index}>
+                      <TableCell>{item.index}</TableCell>
+                      <TableCell>{item.champion}</TableCell>
+                      <TableCell>{item.count}</TableCell>
+                      <TableCell>{item.loss_percentage}%</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </div>
         )}
       </div>
