@@ -61,7 +61,12 @@ function App() {
             {loading ? "Loading..." : "Fetch Data"}
           </button>
         </form>
-        {loading && <div className="loader mt-4"></div>} {/* Loading spinner */}
+        {loading && (
+          <div className="flex justify-center items-center h-16">
+            <div className="loader"></div>
+          </div>
+        )}{" "}
+        {/* Loading spinner */}
         {data.length > 0 && (
           <div className="result mt-8 bg-white shadow-lg rounded-lg p-4 w-full max-w-md">
             <h2 className="text-xl font-bold mb-4">Results:</h2>
